@@ -1,0 +1,417 @@
+{
+	"info": {
+		"_postman_id": "96ff321e-1df2-4676-8546-8ad2072e7c25",
+		"name": "InMetrics",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Listar Empregados",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "37823485-c839-41c6-a795-a29d864f3c86",
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"var request_id = pm.environment.get(\"request-id\");",
+							"var message_request_id = \"Request-Id: \" + request_id;",
+							"try {    ",
+							"      pm.response.to.have.status(200);  ",
+							"         ",
+							"}catch (err) {",
+							"    console.log(err);",
+							"    console.log(pm.response);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "*",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "gzip, deflate, br",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Cookie",
+						"value": "{{Cookie}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{base_endpoint}}/empregado/list_all",
+					"host": [
+						"{{base_endpoint}}"
+					],
+					"path": [
+						"empregado",
+						"list_all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cadastrar Empregado",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "c09b299a-1dc2-49eb-8c4d-7c0457349228",
+						"exec": [
+							"var uuid = require('uuid');",
+							"pm.environment.set(\"request-id\", uuid.v4());",
+							"",
+							"var nome = \"Test_InMetrics_\" + Math.random().toString(36).substring(4);",
+							"pm.environment.set(\"nome\", nome);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "7969ecf7-12ff-41f5-9ff4-35e41567846b",
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"var request_id = pm.environment.get(\"request-id\");",
+							"var message_request_id = \"Request-Id: \" + request_id;",
+							"try {",
+							"    var id = jsonData.empregadoId;",
+							"    pm.environment.set(\"empregadoId\", id);",
+							"",
+							"    pm.test(\"Empregado [\" + id + \"] was created.\", function () {",
+							"        pm.response.to.have.status(202);  ",
+							"    });",
+							"        var nome = jsonData.nome;        ",
+							"}catch (err) {",
+							"    console.log(err);",
+							"    console.log(pm.response);",
+							"}",
+							"",
+							"pm.test(\"Check the data returned. \" + message_request_id, function () {",
+							"    pm.expect(nome).to.eql(pm.environment.get(\"nome\"));",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "*",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "gzip, deflate, br",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Cookie",
+						"value": "{{Cookie}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"admissao\": \"10/10/2020\",\n  \"cargo\": \"QA\",\n  \"comissao\": \"10,00\",\n  \"cpf\": \"011.865.668-59\",\n  \"departamentoId\": 1,\n  \"nome\": \"{{nome}}\",\n  \"salario\": \"1.500,00\",\n  \"sexo\": \"f\",\n  \"tipoContratacao\": \"pj\"\n}"
+				},
+				"url": {
+					"raw": "{{base_endpoint}}/empregado/cadastrar",
+					"host": [
+						"{{base_endpoint}}"
+					],
+					"path": [
+						"empregado",
+						"cadastrar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Atualizar empregado",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "9fef0d4f-81e8-4992-baa5-4ae195e9e3f2",
+						"exec": [
+							"var uuid = require('uuid');",
+							"pm.environment.set(\"request-id\", uuid.v4());",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "03a3e287-eed7-43ea-81b4-eccc1630680d",
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"var request_id = pm.environment.get(\"request-id\");",
+							"var message_request_id = \"Request-Id: \" + request_id;",
+							"try {",
+							"    var id = jsonData.empregadoId;",
+							"    pm.environment.set(\"empregadoId\", id);",
+							"",
+							"    pm.test(\"Empregado [\" + id + \"] was created.\", function () {",
+							"        pm.response.to.have.status(202);  ",
+							"    });",
+							"        var admissao = jsonData.admissao;  ",
+							"        pm.environment.set(\"admissao\", admissao);    ",
+							"}catch (err) {",
+							"    console.log(err);",
+							"    console.log(pm.response);",
+							"}",
+							"pm.test(\"Check the data returned. \" + message_request_id, function () {",
+							"    pm.expect(admissao).to.eql(pm.environment.get(\"admissao\"));",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "*",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "gzip, deflate, br",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Cookie",
+						"value": "{{Cookie}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"admissao\": \"10/09/2020\",\n  \"cargo\": \"QA\",\n  \"comissao\": \"10,00\",\n  \"cpf\": \"011.865.668-59\",\n  \"departamentoId\": 1,\n  \"nome\": \"Lutest InMetrics\",\n  \"salario\": \"1.500,00\",\n  \"sexo\": \"f\",\n  \"tipoContratacao\": \"pj\"\n}"
+				},
+				"url": {
+					"raw": "{{base_endpoint}}/empregado/alterar/{{empregadoId}}",
+					"host": [
+						"{{base_endpoint}}"
+					],
+					"path": [
+						"empregado",
+						"alterar",
+						"{{empregadoId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listar empregado por ID",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "c2b2e6c3-45e1-4a7d-9d6c-c26b38223947",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "e9ddc1fe-dbfd-4017-a1e5-0a6f34464bec",
+						"exec": [
+							"var jsonData = pm.response.json();",
+							"var request_id = pm.environment.get(\"request-id\");",
+							"var message_request_id = \"Request-Id: \" + request_id;",
+							"try {    ",
+							"        var id = (pm.environment.get(\"empregadoId\"));",
+							"        if(id == jsonData.empregadoId){",
+							"            pm.test(\"Empregado [\" + id + \"] retornado com sucesso\", function () {",
+							"            pm.response.to.have.status(202);  ",
+							"            });",
+							"        }",
+							"}catch (err) {",
+							"    console.log(err);",
+							"    console.log(pm.response);",
+							"}",
+							"pm.test(\"Check the data returned. \" + message_request_id, function () {",
+							"    pm.expect(id).to.eql(jsonData.empregadoId);",
+							"});",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "*",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "gzip, deflate, br",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Cookie",
+						"value": "{{Cookie}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{base_endpoint}}/empregado/list/{{empregadoId}}",
+					"host": [
+						"{{base_endpoint}}"
+					],
+					"path": [
+						"empregado",
+						"list",
+						"{{empregadoId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete empregado por ID",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "f1a55e9b-9ec7-4acd-a6a8-01ecf0a8602c",
+						"exec": [
+							"var uuid = require('uuid');",
+							"pm.environment.set(\"request-id\", uuid.v4());",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "8f76a4bd-e653-46f4-9149-1fc284bf9304",
+						"exec": [
+							"var requestId = pm.environment.get(\"request-id\");",
+							"",
+							"pm.test(\"User was deleted. Status code is 202\", function () {",
+							"    pm.response.to.have.status(202);",
+							"    pm.response.to.have.body(\"Deletado\")",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept",
+						"type": "text",
+						"value": "*"
+					},
+					{
+						"key": "Accept-Encoding",
+						"type": "text",
+						"value": "gzip, deflate, br",
+						"disabled": true
+					},
+					{
+						"key": "Cookie",
+						"type": "text",
+						"value": "{{Cookie}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{base_endpoint}}/empregado/deletar/{{empregadoId}}",
+					"host": [
+						"{{base_endpoint}}"
+					],
+					"path": [
+						"empregado",
+						"deletar",
+						"{{empregadoId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
